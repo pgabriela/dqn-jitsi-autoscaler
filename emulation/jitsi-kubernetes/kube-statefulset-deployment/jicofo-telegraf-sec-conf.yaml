@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jicofo-telegraf-secrets
+  namespace: jitsi
+type: Opaque
+stringData:
+  INFLUXDB_DB: jicofo_stats
+  INFLUXDB_URL: http://10.0.106.58:8086 # CHANGE THE ADDRESS TO INFLUXDB SERVICE CLUSTER IP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jicofo-telegraf-config
+  namespace: jitsi
+data:
+  telegraf.conf: |+
+    [[outputs.influxdb]]
+      urls = ["$INFLUXDB_URL"]
+      database = "$INFLUXDB_DB"
+    [[inputs.http]]
+      name_override = "jicofo_stats"
+      urls = ["$INPUT_ADDR"]
+      data_format = "json"
+      interval = "1s"

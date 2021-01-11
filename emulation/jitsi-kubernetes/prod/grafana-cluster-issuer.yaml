@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production2
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: petrag@andrew.cmu.edu # CHANGE THIS TO YOUR OWN EMAIL ADDRESS
+    privateKeySecretRef:
+      name: letsencrypt-production2
+    solvers:
+      - http01:
+          ingress: {}

@@ -1,0 +1,6 @@
+[submodule "emulation/jitsi-kubernetes/kube-prometheus"]
+	path = emulation/jitsi-kubernetes/kube-prometheus
+	url = https://github.com/prometheus-operator/kube-prometheus
+[submodule "emulation/dockers/load-generator-dockers/torture-selenium-docker/jitsi-meet-torture"]
+	path = emulation/dockers/load-generator-dockers/torture-selenium-docker/jitsi-meet-torture
+	url = https://github.com/jitsi/jitsi-meet-torture

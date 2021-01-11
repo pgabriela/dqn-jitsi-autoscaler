@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "fileName": "20201208T172120Z.meta",
+    "size": 259
+  },
+  "limited": false,
+  "files": [
+    {
+      "database": "jitsi_stats",
+      "policy": "autogen",
+      "shardID": 3,
+      "fileName": "20201208T172120Z.s3.tar.gz",
+      "size": 980480,
+      "lastModified": 0
+    }
+  ]
+}

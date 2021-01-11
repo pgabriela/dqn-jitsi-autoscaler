@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: tls-secret-prd2
+  namespace: default
+spec:
+  secretName: tls-secret-prd2
+  dnsNames:
+    - jitsigrafana.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-haproxy PUBLIC IP
+  acme:
+    config:
+      - http01:
+          ingressClass: {}
+        domains:
+          - jitsigrafana.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-haproxy PUBLIC IP
+  issuerRef:
+    name: letsencrypt-production2
+    kind: ClusterIssuer

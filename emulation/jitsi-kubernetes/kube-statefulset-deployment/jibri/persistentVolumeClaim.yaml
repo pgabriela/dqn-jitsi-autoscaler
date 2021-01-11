@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jibri-volume-claim
+  #namespace: jibri
+  namespace: jitsi
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: jibri-azurefile
+  resources:
+    requests:
+      storage: 100Gi

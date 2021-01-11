@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "fileName": "20201209T141524Z.meta",
+    "size": 259
+  },
+  "limited": false,
+  "files": [
+    {
+      "database": "jicofo_stats",
+      "policy": "autogen",
+      "shardID": 2,
+      "fileName": "20201209T141524Z.s2.tar.gz",
+      "size": 311808,
+      "lastModified": 0
+    }
+  ]
+}

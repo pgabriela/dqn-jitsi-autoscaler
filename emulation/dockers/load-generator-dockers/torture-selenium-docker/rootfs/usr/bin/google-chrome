@@ -1,0 +1,9 @@
+#!/bin/bash
+ARGS=$@
+
+ARGS=$(echo $ARGS | sed "s#^#--headless --ignore-certificate-errors #")
+ARGS=$(echo $ARGS | sed "s#--use-file-for-fake-video-capture=[^ ]*#--use-file-for-fake-video-capture=$RESOURCES_DIR/fakeVideoStream.mjpeg#")
+
+printf "\nModified chrome ARGS: $ARGS\n"
+
+exec /usr/bin/google-chrome-bin $ARGS

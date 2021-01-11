@@ -1,0 +1,210 @@
+#author : Dushmantha (dushmanthab99@gmail.net)
+#this script will create following deployments in a single pod.
+# 1. jicofo
+# 2. prosody
+# 3. jitsi web
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: jitsi
+  name: jitsi
+  namespace: jitsi
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      k8s-app: jitsi
+  template:
+    metadata:
+      labels:
+        k8s-app: jitsi
+    spec:
+      containers:
+        - name: telegraf
+          image: telegraf:1.10.0
+          envFrom:
+            - secretRef:
+                name: jicofo-telegraf-secrets
+          env:
+            - name: JICOFO_ADDR
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: INPUT_ADDR
+              value: http://$(JICOFO_ADDR):8888/stats
+          volumeMounts:
+            - name: jicofo-telegraf-config-volume
+              mountPath: /etc/telegraf/telegraf.conf
+              subPath: telegraf.conf
+              readOnly: true
+        - name: jicofo
+          image: jitsi/jicofo
+          volumeMounts:
+            - mountPath: /config
+              name: jicofo-config-volume
+          imagePullPolicy: Always
+          env:
+            - name: XMPP_SERVER
+              value: localhost
+            - name: XMPP_DOMAIN
+              #value: meet.jitsi
+              value: jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_MUC_DOMAIN
+              #value: muc.meet.jitsi
+              value: muc.jitsicluster.eastus.cloudapp.azure.com
+            #- name: ENABLE_AUTH
+            #  value: "1"
+            #- name: ENABLE_GUESTS
+            #  value: "1"
+            - name: XMPP_GUEST_DOMAIN
+            #  #value: guest.meet.jitsi
+              value: guest.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_AUTH_DOMAIN
+              #value: auth.meet.jitsi
+              value: auth.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_INTERNAL_MUC_DOMAIN
+              #value: internal-muc.meet.jitsi
+              value: internal-muc.jitsicluster.eastus.cloudapp.azure.com
+            - name: JICOFO_COMPONENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-config
+                  key: JICOFO_COMPONENT_SECRET
+            - name: JICOFO_AUTH_USER
+              value: focus
+            - name: JICOFO_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-config
+                  key: JICOFO_AUTH_PASSWORD
+            - name: TZ
+              value: America/Los_Angeles
+            - name: JVB_BREWERY_MUC
+              value: jvbbrewery
+            #- name: JIBRI_BREWERY_MUC
+            #  value: JibriBrewery
+            #- name: JIBRI_PENDING_TIMEOUT
+            #  value: "90"
+        - name: prosody
+          image: jitsi/prosody
+          volumeMounts:
+            - mountPath: /config
+              name: prosody-config-volume
+          imagePullPolicy: Always
+          env:
+            - name: XMPP_DOMAIN
+              #value: meet.jitsi
+              value: jitsicluster.eastus.cloudapp.azure.com
+            #- name: XMPP_RECORDER_DOMAIN
+            #  #value: recorder.meet.jitsi
+            #  value: recorder.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_GUEST_DOMAIN
+            #  #value: guest.meet.jitsi
+              value: guest.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_AUTH_DOMAIN
+              #value: auth.meet.jitsi
+              value: auth.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_MUC_DOMAIN
+              #value: muc.meet.jitsi
+              value: muc.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_INTERNAL_MUC_DOMAIN
+              #value: internal-muc.meet.jitsi
+              value: internal-muc.jitsicluster.eastus.cloudapp.azure.com
+            - name: JICOFO_COMPONENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-config
+                  key: JICOFO_COMPONENT_SECRET
+            - name: JVB_AUTH_USER
+              value: jvb
+            - name: JVB_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-config
+                  key: JVB_AUTH_PASSWORD
+            - name: JICOFO_AUTH_USER
+              value: focus
+            - name: JICOFO_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-config
+                  key: JICOFO_AUTH_PASSWORD
+            #- name: JIBRI_XMPP_USER
+            #  value: jibri
+            #- name: JIBRI_XMPP_PASSWORD
+            #  value: jibriAuthPass123
+            #- name: JIBRI_RECORDER_USER
+            #  value: recorder
+            #- name: JIBRI_RECORDER_PASSWORD
+            #  value: jibriRecorderPass123
+            #- name: ENABLE_AUTH
+            #  value: "1"
+            #- name: ENABLE_GUESTS
+            #  value: "1"
+            #- name: ENABLE_RECORDING
+            #  value: "1"
+            #- name: AUTH_TYPE
+            #  value: "internal"
+            - name: TZ
+              value: America/Los_Angeles
+            - name: JVB_TCP_HARVESTER_DISABLED
+              value: "true"
+        - name: web
+          image: jitsi/web:stable-5142
+          imagePullPolicy: Always
+          env:
+            - name: XMPP_SERVER
+              value: localhost
+            - name: JICOFO_AUTH_USER
+              value: focus
+            - name: XMPP_DOMAIN
+              #value: meet.jitsi
+              value: jitsicluster.eastus.cloudapp.azure.com
+            #- name: ENABLE_FILE_RECORDING_SERVICE
+            #  value: "1"
+            #- name: ENABLE_FILE_RECORDING_SERVICE_SHARING
+            #  value: "1"
+            #- name: ENABLE_RECORDING
+            #  value: "1"
+            #- name: XMPP_RECORDER_DOMAIN
+            #  #value: recorder.meet.jitsi
+            #  value: recorder.jitsicluster.eastus.cloudapp.azure.com
+            #- name: ENABLE_GUESTS
+            #  value: "1"
+            #- name: ENABLE_AUTH
+            #  value: "1"
+            - name: XMPP_GUEST_DOMAIN
+            #  #value: guest.meet.jitsi
+              value: guest.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_AUTH_DOMAIN
+              #value: auth.meet.jitsi
+              value: auth.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_INTERNAL_MUC_DOMAIN
+              #value: internal-muc.meet.jitsi
+              value: internal-muc.jitsicluster.eastus.cloudapp.azure.com
+            - name: XMPP_BOSH_URL_BASE
+              value: http://127.0.0.1:5280
+            - name: XMPP_MUC_DOMAIN
+              #value: muc.meet.jitsi
+              value: muc.jitsicluster.eastus.cloudapp.azure.com
+            - name: TZ
+              value: America/Los_Angeles
+            - name: JVB_TCP_HARVESTER_DISABLED
+              value: "true"
+      volumes:
+        - name: jvb-config-volume
+          hostPath:
+            path: /home/jitsi-config/jvb
+        - name: jicofo-config-volume
+          hostPath:
+            path: /home/jitsi-config/jicofo
+        - name: prosody-config-volume
+          hostPath:
+            path: /home/jitsi-config/prosody
+        - name: jicofo-telegraf-config-volume
+          configMap:
+            name: jicofo-telegraf-config

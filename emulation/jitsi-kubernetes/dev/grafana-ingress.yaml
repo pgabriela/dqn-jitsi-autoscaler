@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging2
+spec:
+  tls:
+  - hosts:
+    - jitsigrafana.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-haproxy PUBLIC IP
+    secretName: tls-secret-stg2
+  rules:
+  - host: jitsigrafana.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-haproxy PUBLIC IP
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: 3000

@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: tls-secret-prd
+  namespace: default
+spec:
+  secretName: tls-secret-prd
+  dnsNames:
+    - jitsicluster.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-nginx PUBLIC IP
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - jitsicluster.eastus.cloudapp.azure.com # CHANGE THIS TO DNS NAME OF YOUR ingress-nginx PUBLIC IP
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer

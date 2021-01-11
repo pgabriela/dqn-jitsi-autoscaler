@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jitsi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-k-config
+  namespace: jitsi
+stringData:
+  my-kubeconfig: |
+    # Put the texts inside ~/.kube/config file here
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: load-runner
+  namespace: jitsi
+spec:
+  template:
+    metadata:
+      labels:
+        app: load-runner
+        name: load-runner
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: load-runner
+          image: 421379781443.dkr.ecr.us-east-1.amazonaws.com/load-runner:1.0.0 # CHANGE THIS TO CREATED REPO
+          imagePullPolicy: Always
+          env:
+            - name: KUBECONFIG
+              value: /k-cfg/my-kubeconfig
+          volumeMounts:
+            - name: k-config
+              mountPath: /k-cfg
+      volumes:
+        - name: k-config
+          secret:
+            secretName: my-k-config

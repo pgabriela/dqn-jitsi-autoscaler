@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "fileName": "20201207T112604Z.meta",
+    "size": 259
+  },
+  "limited": false,
+  "files": [
+    {
+      "database": "jitsi_stats",
+      "policy": "autogen",
+      "shardID": 2,
+      "fileName": "20201207T112604Z.s2.tar.gz",
+      "size": 1495040,
+      "lastModified": 0
+    }
+  ]
+}

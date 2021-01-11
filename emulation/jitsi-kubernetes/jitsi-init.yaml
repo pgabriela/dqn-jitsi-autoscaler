@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jitsi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jitsi-config
+  namespace: jitsi
+type: Opaque
+stringData:
+  JICOFO_COMPONENT_SECRET: testJitsi123
+  JICOFO_AUTH_PASSWORD: testJitsi123
+  JVB_AUTH_PASSWORD: testJitsi123

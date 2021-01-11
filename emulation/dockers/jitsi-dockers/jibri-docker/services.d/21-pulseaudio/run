@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+# we have to set it, otherwise pulseaudio won't find ~/.config/pulse folder
+HOME=/home/jibri/
+
+DAEMON="/usr/bin/start-pulseaudio-x11"
+exec s6-setuidgid jibri /bin/bash -c "exec $DAEMON"

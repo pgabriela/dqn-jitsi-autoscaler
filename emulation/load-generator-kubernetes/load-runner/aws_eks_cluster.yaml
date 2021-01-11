@@ -1,0 +1,22 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: jitsi-load-generator
+  region: us-east-1 # CHANGE THIS TO THE REGION
+
+availabilityZones: ["us-east-1a", "us-east-1b"] # OPTIONAL
+
+managedNodeGroups:
+  - name: managed-ng-1
+    instanceType: c5.xlarge
+    minSize: 2
+    volumeSize: 50
+  - name: managed-ng-2
+    instanceType: c5.xlarge
+    minSize: 3
+    volumeSize: 50
+  - name: managed-ng-3
+    instanceType: c5.xlarge
+    minSize: 3
+    volumeSize: 50

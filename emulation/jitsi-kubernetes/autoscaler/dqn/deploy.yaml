@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-k-config
+  namespace: jitsi
+stringData:
+  my-kubeconfig: |
+    # Copy the content of ~/.kube/config file and paste it here
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dqn-autoscaler
+  namespace: jitsi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dqn-autoscaler
+  template:
+    metadata:
+      labels:
+        app: dqn-autoscaler
+    spec:
+      containers:
+        - name: dqn-autoscaler
+          image: jitsiacr.azurecr.io/dqn-autoscaler:1.0.0 # UPDATE THIS
+          imagePullPolicy: Always
+          env:
+            - name: KUBECONFIG
+              value: /k-cfg/my-kubeconfig
+            - name: AUTOSCALER_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            # Uncomment this for pre-trained model
+            #- name: MODEL_STATE_PATH
+            #  value: model_state_dict
+            - name: INFLUXDB_HOST
+              value: 10.0.204.246 # UPDATE THIS
+            - name: XMPP_SERVER
+              value: 10.0.41.15 # Internal IP of the Web Service
+            - name: DOCKER_HOST_ADDR0
+              value: 52.149.170.104 # External IP of the first JVB service
+            - name: DOCKER_HOST_ADDR1
+              value: 52.149.170.104 # External IP of the second JVB service
+            - name: DOCKER_HOST_ADDR2
+              value: 52.149.170.104 # External IP of the third JVB service
+            - name: DOCKER_HOST_ADDR3
+              value: 52.149.170.104 # External IP of the fourth JVB service
+            - name: DOCKER_HOST_ADDR4
+              value: 52.149.170.104 # External IP of the fifth JVB service
+            - name: DOCKER_HOST_ADDR5
+              value: 52.149.170.104 # External IP of the sixth JVB service
+          volumeMounts:
+            - name: k-config
+              mountPath: /k-cfg
+      volumes:
+        - name: k-config
+          secret:
+            secretName: my-k-config

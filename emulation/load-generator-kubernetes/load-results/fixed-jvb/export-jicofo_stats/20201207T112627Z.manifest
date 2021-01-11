@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "fileName": "20201207T112627Z.meta",
+    "size": 259
+  },
+  "limited": false,
+  "files": [
+    {
+      "database": "jicofo_stats",
+      "policy": "autogen",
+      "shardID": 3,
+      "fileName": "20201207T112627Z.s3.tar.gz",
+      "size": 177152,
+      "lastModified": 0
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "fileName": "20201215T120245Z.meta",
+    "size": 259
+  },
+  "limited": false,
+  "files": [
+    {
+      "database": "jicofo_stats",
+      "policy": "autogen",
+      "shardID": 2,
+      "fileName": "20201215T120245Z.s2.tar.gz",
+      "size": 105984,
+      "lastModified": 0
+    }
+  ]
+}
