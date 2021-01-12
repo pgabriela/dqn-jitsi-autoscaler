@@ -45,24 +45,43 @@ for row in monitoring_data2.get_points():
 
 xformatter = mdates.DateFormatter('%H:%M', tz=timezone(timedelta(hours=9)))
 
+# Set general font size
+plt.rcParams['font.size'] = '16'
+
 ax = plt.subplot(221)
 plt.plot(conferences2[0], conferences2[1])
-plt.title('Total Conferences (20/11/2020)')
+plt.title('Total Conferences (20/11/2020)', fontsize=16)
 ax.xaxis.set_major_formatter(xformatter)
+plt.grid(True)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
 
 ax = plt.subplot(222)
 plt.plot(participants2[0], participants2[1])
-plt.title('Total Participants (20/11/2020)')
+plt.title('Total Participants (20/11/2020)', fontsize=16)
 ax.xaxis.set_major_formatter(xformatter)
+plt.grid(True)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
 
 ax = plt.subplot(223)
 plt.plot(conferences[0], conferences[1])
-plt.title('Total Conferences (24/11/2020)')
+plt.title('Total Conferences (24/11/2020)', fontsize=16)
 ax.xaxis.set_major_formatter(xformatter)
+plt.grid(True)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
 
 ax = plt.subplot(224)
 plt.plot(participants[0], participants[1])
-plt.title('Total Participants (24/11/2020)')
+plt.title('Total Participants (24/11/2020)', fontsize=16)
 ax.xaxis.set_major_formatter(xformatter)
+plt.grid(True)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
 
 plt.show()

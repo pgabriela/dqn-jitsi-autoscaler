@@ -224,20 +224,44 @@ for i in range(len(reconstructed)):
     avg = part_reconstructed[i] / reconstructed[i]
     avg_part_per_conf_recon.append(avg)
 
-plt.subplot(221)
+
+# Set general font size
+plt.rcParams['font.size'] = '16'
+
+ax = plt.subplot(221)
 plt.plot(np.arange(len(conferences[0])), conferences[1])
-plt.title("Generated Total Conferences")
+plt.title("Generated Total Conferences", fontsize=16)
 plt.grid(True)
-plt.subplot(222)
+plt.xlabel('Timesteps', fontsize=14)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(222)
 plt.plot(np.arange(0, len(participants[0])), participants[1])
-plt.title("Generated Total Participants")
+plt.title("Generated Total Participants", fontsize=16)
 plt.grid(True)
-plt.subplot(223)
+plt.xlabel('Timesteps', fontsize=14)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(223)
 plt.plot(np.arange(0, len(reconstructed)), reconstructed)
-plt.title("Total Conferences for torture-selenium (Scaled Down)")
+plt.title("Total Conferences for torture-selenium (Scaled Down)", fontsize=16)
 plt.grid(True)
-plt.subplot(224)
+plt.xlabel('Timesteps', fontsize=14)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(224)
 plt.plot(np.arange(0, len(part_reconstructed)), part_reconstructed)
-plt.title("Total Participants for torture-selenium (Scaled Down)")
+plt.title("Total Participants for torture-selenium (Scaled Down)", fontsize=16)
 plt.grid(True)
+plt.xlabel('Timesteps', fontsize=14)
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
 plt.show()

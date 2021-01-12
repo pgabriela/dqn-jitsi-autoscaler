@@ -15,6 +15,7 @@ from collections import namedtuple
 # Hyperparameters & Utilities #
 ###############################
 df = pd.read_csv('dbV3.csv')
+#timeseries = pd.read_csv('timeseries.csv')
 timeseries = pd.read_csv('timeseries-V2.csv')
 min_jvb_num = 1
 max_jvb_num = 50
@@ -200,6 +201,9 @@ for i in range(len(conf_count_over_time)):
         print(f"Timesteps passed: {i+1}", end="\r")
 print(f"\nSimulation finished in {time.time() - curr_time} seconds")
 
+#jvb_num_history2 = pickle.load(open('final/jvb_num_history.pkl', 'rb'))
+#rewards_history2 = pickle.load(open('final/rewards_history.pkl', 'rb'))
+#losses_history2 = pickle.load(open('final/losses_history.pkl', 'rb'))
 jvb_num_history2 = pickle.load(open('final-diff-test-train-data/jvb_num_history.pkl', 'rb'))
 rewards_history2 = pickle.load(open('final-diff-test-train-data/rewards_history.pkl', 'rb'))
 losses_history2 = pickle.load(open('final-diff-test-train-data/losses_history.pkl', 'rb'))
@@ -207,21 +211,29 @@ losses_history2 = pickle.load(open('final-diff-test-train-data/losses_history.pk
 #################
 # Visualization #
 #################
-plt.figure(figsize=(16, 9))
-plt.subplot(511)
-plt.title("Conferences")
+# Set general font size
+plt.rcParams['font.size'] = '16'
+
+ax = plt.subplot(421)
+plt.title("Conferences over Timesteps", fontsize=16)
 plt.plot(np.arange(len(conf_count_over_time)), conf_count_over_time)
-plt.subplot(512)
-plt.title("Participants")
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(422)
+plt.title("Participants over Timesteps", fontsize=16)
 plt.plot(np.arange(len(part_count_over_time)), part_count_over_time)
-ax = plt.subplot(513)
-plt.title("JVB Count")
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(412)
+plt.title("JVB Count over Timesteps", fontsize=16)
 plt.plot(np.arange(len(jvb_num_history)), jvb_num_history, label='Threshold-based')
 plt.plot(np.arange(len(jvb_num_history2)), jvb_num_history2, label='DQN-based')
 jvb_improvement = abs(np.mean(jvb_num_history) - np.mean(jvb_num_history2)) * 100 / np.mean(jvb_num_history)
-t = plt.text(0.99, 0.9, f'Total JVB Count Baseline = {sum(jvb_num_history):.2f}'
-        f'\nAverage JVB Count Baseline = {np.mean(jvb_num_history):.2f}'
-        f'\nTotal JVB Count DQN = {sum(jvb_num_history2):.2f}'
+t = plt.text(0.99, 0.9, f'Average JVB Count Baseline = {np.mean(jvb_num_history):.2f}'
         f'\nAverage JVB Count DQN = {np.mean(jvb_num_history2):.2f}'
         f'\n% Improvement = {jvb_improvement:.2f}%',
     horizontalalignment='right',
@@ -229,14 +241,16 @@ t = plt.text(0.99, 0.9, f'Total JVB Count Baseline = {sum(jvb_num_history):.2f}'
     transform=ax.transAxes)
 t.set_bbox(dict(facecolor='white', boxstyle='round', edgecolor='#BBBBBB', alpha=0.8))
 plt.legend(loc='upper left')
-ax = plt.subplot(514)
-plt.title("Rewards")
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(413)
+plt.title("Rewards over Timesteps", fontsize=16)
 plt.plot(np.arange(len(rewards_history)), rewards_history, label='Threshold-based')
 plt.plot(np.arange(len(rewards_history2)), rewards_history2, label='DQN-based')
 rewards_improvement = abs((np.mean(rewards_history) - np.mean(rewards_history2)) * 100 / np.mean(rewards_history))
-t = plt.text(0.99, 0.9, f'Total Reward Baseline = {sum(rewards_history):.2f}'
-        f'\nAverage Reward Baseline = {np.mean(rewards_history):.2f}'
-        f'\nTotal Reward DQN = {sum(rewards_history2):.2f}'
+t = plt.text(0.99, 0.9, f'Average Reward Baseline = {np.mean(rewards_history):.2f}'
         f'\nAverage Reward DQN = {np.mean(rewards_history2):.2f}'
         f'\n% Improvement = {rewards_improvement:.2f}%',
     horizontalalignment='right',
@@ -244,14 +258,16 @@ t = plt.text(0.99, 0.9, f'Total Reward Baseline = {sum(rewards_history):.2f}'
     transform=ax.transAxes)
 t.set_bbox(dict(facecolor='white', boxstyle='round', edgecolor='#BBBBBB', alpha=0.8))
 plt.legend(loc='upper left')
-ax = plt.subplot(515)
-plt.title("Losses")
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
+ax = plt.subplot(414)
+plt.title("Losses over Timesteps", fontsize=16)
 plt.plot(np.arange(len(losses_history)), losses_history, label='Threshold-based')
 plt.plot(np.arange(len(losses_history2)), losses_history2, label='DQN-based')
 loss_improvement = abs(np.mean(losses_history) - np.mean(losses_history2)) * 100 / np.mean(losses_history)
-t = plt.text(0.99, 0.9, f'Total Loss Baseline = {sum(losses_history):.4f}'
-        f'\nAverage Loss Baseline = {np.mean(losses_history):.6f}'
-        f'\nTotal Loss DQN = {sum(losses_history2):.4f}'
+t = plt.text(0.99, 0.9, f'Average Loss Baseline = {np.mean(losses_history):.6f}'
         f'\nAverage Loss DQN = {np.mean(losses_history2):.6f}'
         f'\n% Improvement = {loss_improvement:.2f}%',
     horizontalalignment='right',
@@ -259,4 +275,8 @@ t = plt.text(0.99, 0.9, f'Total Loss Baseline = {sum(losses_history):.4f}'
     transform=ax.transAxes)
 t.set_bbox(dict(facecolor='white', boxstyle='round', edgecolor='#BBBBBB', alpha=0.8))
 plt.legend(loc='upper left')
+# Set tick font size
+for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+	label.set_fontsize(16)
+
 plt.show()
